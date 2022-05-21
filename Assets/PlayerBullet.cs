@@ -12,6 +12,7 @@ public class PlayerBullet : MonoBehaviour
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
+        Fire();
     }
 
     // Update is called once per frame
@@ -20,9 +21,9 @@ public class PlayerBullet : MonoBehaviour
         
     }
 
-    public void Fire(float dir) {
-        myRigidbody.velocity = new Vector2(Mathf.Sign(dir) * speed, 0f);
-        transform.localScale = new Vector2(transform.localScale.x * dir, transform.localScale.y);
+    public void Fire() {
+        myRigidbody.velocity = new Vector2(speed, 0f);
+        transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
     }
 
     public void OnTriggerEnter2D(Collider2D collision) {

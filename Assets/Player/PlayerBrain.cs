@@ -178,7 +178,10 @@ public class PlayerBrain : MonoBehaviour
         if (isPossessing) {
             player.transform.DetachChildren();
             transform.parent = player.transform;
-            body.GetComponent<Body>().DynamicBody(false);
+            Body bodyComponent = body.GetComponent<Body>();
+            bodyComponent.DynamicBody(false);
+            bodyComponent.RevertLayer();
+
             body = null;
         } else {
             RaycastHit2D newBody = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, bodyLayerMask);
@@ -190,6 +193,7 @@ public class PlayerBrain : MonoBehaviour
                 body.transform.parent = player.transform;
                 transform.parent = body.transform;
                 body.GetComponent<Body>().DynamicBody(true);
+                body.layer = gameObject.layer;
             }
         }
     }

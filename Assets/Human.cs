@@ -14,7 +14,6 @@ public class Human : MonoBehaviour
     private float jumpBufferCounter;
 
     [SerializeField] LayerMask platformLayerMask;
-    [SerializeField] LayerMask bodyLayerMask;
 
     [SerializeField] GameObject bullet;
 
@@ -165,7 +164,6 @@ public class Human : MonoBehaviour
     }
 
     void OnFire() {
-        GameObject newBullet = Instantiate(bullet);
-        newBullet.GetComponent<PlayerBullet>().Fire(direction);
+        GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
     }
 }
