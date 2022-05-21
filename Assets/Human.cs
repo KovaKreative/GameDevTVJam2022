@@ -164,6 +164,8 @@ public class Human : MonoBehaviour
     }
 
     void OnFire() {
-        GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
+        Debug.Log(Quaternion.FromToRotation(new Vector2(0, 0), moveInput));
+        //GameObject newBullet = Instantiate(bullet, transform.position, transform.LookAt());
+        newBullet.GetComponent<PlayerBullet>().Direction(direction);
     }
 }

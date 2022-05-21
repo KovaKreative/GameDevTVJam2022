@@ -6,6 +6,10 @@ public class PlayerBullet : MonoBehaviour
 {
     [SerializeField] float speed = 8f;
 
+    Camera cam;
+
+    float direction = 1f;
+
     Rigidbody2D myRigidbody;
 
     // Start is called before the first frame update
@@ -13,17 +17,26 @@ public class PlayerBullet : MonoBehaviour
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         Fire();
+
+        cam = FindObjectOfType<Camera>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Vector3 viewPos = cam.WorldToViewportPoint(transform.position);
+        if (viewPos.x > 1f || viewPos.x < 0f || viewPos.y > 1f || viewPos.y < 0f) {
+            Destroy(gameObject);
+        }
     }
 
-    public void Fire() {
-        myRigidbody.velocity = new Vector2(speed, 0f);
-        transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
+    public void Direction(float dir) {
+        direction = Mathf.Sign(dir);
+    }
+
+    private void Fire() {
+        Debug.Log(transform.forward);
+        myRigidbody.velocity = transform.rotation.eulerAngles * speed;
     }
 
     public void OnTriggerEnter2D(Collider2D collision) {
