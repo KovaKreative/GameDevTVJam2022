@@ -16,6 +16,8 @@ public class Human : MonoBehaviour
     [SerializeField] LayerMask platformLayerMask;
     [SerializeField] LayerMask bodyLayerMask;
 
+    [SerializeField] GameObject bullet;
+
     bool onGround = true;
     bool moving = false;
     bool isAlive = true;
@@ -95,7 +97,6 @@ public class Human : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D collision) {
         /*
         EnemyStats enemy = collision.gameObject.GetComponent<EnemyStats>();
-
         if (enemy != null) {
             if (stats.PlayerDamaged(enemy.GetDamage())) {
                 Die();
@@ -119,12 +120,10 @@ public class Human : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collision) {
         /*
         PickUp pickup = collision.gameObject.GetComponent<PickUp>();
-
         if (pickup != null) {
             pickup.PickedUp();
             return;
         }
-
         if (collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
             stats.PlayerDamaged(-1);
             Die();
@@ -166,6 +165,7 @@ public class Human : MonoBehaviour
     }
 
     void OnFire() {
-
+        GameObject newBullet = Instantiate(bullet);
+        newBullet.GetComponent<PlayerBullet>().Fire(direction);
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -184,15 +182,14 @@ public class PlayerBrain : MonoBehaviour
             body = null;
         } else {
             RaycastHit2D newBody = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, bodyLayerMask);
-            Debug.Log(newBody);
-            if (newBody.collider.gameObject.GetComponent<Body>() != null) {
+
+            if (newBody.collider != null && newBody.collider.gameObject.GetComponent<Body>() != null) {
                 transform.position = new Vector2(newBody.collider.transform.position.x, transform.position.y);
                 direction = newBody.transform.localScale.x;
                 body = newBody.collider.gameObject;
                 body.transform.parent = player.transform;
                 transform.parent = body.transform;
                 body.GetComponent<Body>().DynamicBody(true);
-
             }
         }
     }

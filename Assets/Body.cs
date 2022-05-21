@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Body : MonoBehaviour
 {
-    [SerializeField] int health;
+    [SerializeField] int health = 1;
 
     Rigidbody2D myRigidBody;
 
