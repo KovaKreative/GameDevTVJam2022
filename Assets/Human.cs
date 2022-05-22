@@ -13,14 +13,11 @@ public class Human : MonoBehaviour
     [SerializeField] float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
 
-    [SerializeField] LayerMask platformLayerMask;
-
     [SerializeField] GameObject bullet;
 
-    bool onGround = true;
     bool moving = false;
     bool isAlive = true;
-    bool isPossessing = false;
+    bool possessed = false;
 
     float direction = 1f;
 
@@ -28,31 +25,31 @@ public class Human : MonoBehaviour
 
     bool jumpButton = false;
 
-    RaycastHit2D feet;
-
     Animator myAnimator;
     Rigidbody2D myRigidbody;
-    BoxCollider2D myCollider;
+    Body body;
     Vector2 moveInput;
 
     // Start is called before the first frame update
     void Start() {
         myAnimator = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<BoxCollider2D>();
+        body = GetComponent<Body>();
     }
 
     // Update is called once per frame
     void Update() {
+
+        if (!possessed) {
+            return;
+        }
         if (!isAlive) {
             StopAllMotion();
             return;
         }
-
         DirectionFacing();
         //Animations();
         MovePlayer();
-        onGround = IsGrounded();
         Jump();
     }
 
@@ -83,62 +80,26 @@ public class Human : MonoBehaviour
     */
 
     private void Jump() {
-        coyoteTimeCounter = onGround ? coyoteTime : coyoteTimeCounter - Time.deltaTime;
+        coyoteTimeCounter = body.IsGrounded() ? coyoteTime : coyoteTimeCounter - Time.deltaTime;
         jumpBufferCounter = Mathf.Max(0, jumpBufferCounter - Time.deltaTime);
         if (coyoteTimeCounter > 0 && jumpBufferCounter > 0f) {
+            body.Jumping();
             coyoteTimeCounter = 0;
             float jumpPower = jumpButton ? jumpVelocity : jumpVelocity * 0.4f;
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpPower);
         }
-
     }
 
-    public void OnCollisionEnter2D(Collision2D collision) {
-        /*
-        EnemyStats enemy = collision.gameObject.GetComponent<EnemyStats>();
-        if (enemy != null) {
-            if (stats.PlayerDamaged(enemy.GetDamage())) {
-                Die();
-            }
-            return;
-        }
-        */
-    }
-
-    private void Die() {
-        /*
-        if (!isAlive) { return; }
-        myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpVelocity * 0.8f);
-        onGround = false;
-        isAlive = false;
-        myAnimator.SetTrigger("isDead");
-        stats.ProcessPlayerDeath();
-        */
-    }
-
-    public void OnTriggerEnter2D(Collider2D collision) {
-        /*
-        PickUp pickup = collision.gameObject.GetComponent<PickUp>();
-        if (pickup != null) {
-            pickup.PickedUp();
-            return;
-        }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
-            stats.PlayerDamaged(-1);
-            Die();
-        }
-        */
-    }
-
-    private bool IsGrounded() {
-        float vSpeed = Mathf.Abs(myRigidbody.velocity.y);
-        feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, platformLayerMask);
-        Debug.DrawRay(myCollider.bounds.center, Vector2.down, Color.red);
-        return feet.collider != null;
+    public void Shoot() {
+        Vector2 aimDirection = moveInput - Vector2.zero;
+        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.Euler(new Vector3(0, 0, angle)));
+        Vector2 shootDir = moveInput == Vector2.zero ? new Vector2(direction, 0f) : moveInput;
+        newBullet.GetComponent<PlayerBullet>().Direction(shootDir);
     }
 
     private void StopAllMotion() {
-        myRigidbody.velocity = new Vector2(Mathf.Abs(myRigidbody.velocity.x) < Mathf.Epsilon ? 0f : myRigidbody.velocity.x * 0.9f, onGround ? 0f : myRigidbody.velocity.y);
+        myRigidbody.velocity = Vector2.zero;
     }
 
     void OnMove(InputValue value) {
@@ -164,8 +125,10 @@ public class Human : MonoBehaviour
     }
 
     void OnFire() {
-        Debug.Log(Quaternion.FromToRotation(new Vector2(0, 0), moveInput));
-        //GameObject newBullet = Instantiate(bullet, transform.position, transform.LookAt());
-        newBullet.GetComponent<PlayerBullet>().Direction(direction);
+        Shoot();
+    }
+
+    public void Possess(bool possess) {
+        possessed = possess;
     }
 }

@@ -65,7 +65,7 @@ public class PlayerBrain : MonoBehaviour
     }
 
     private void MovePlayer() {
-
+        Debug.DrawRay(myCollider.bounds.center, moveInput.normalized, Color.red);
         moving = Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y);
 
         if (moving) {
@@ -144,7 +144,7 @@ public class PlayerBrain : MonoBehaviour
     private bool IsGrounded() {
         float vSpeed = Mathf.Abs(myRigidbody.velocity.y);
         feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, platformLayerMask);
-        Debug.DrawRay(myCollider.bounds.center, Vector2.down, Color.red);
+        //Debug.DrawRay(myCollider.bounds.center, Vector2.down, Color.red);
         return feet.collider != null;
     }
 
@@ -179,21 +179,20 @@ public class PlayerBrain : MonoBehaviour
             player.transform.DetachChildren();
             transform.parent = player.transform;
             Body bodyComponent = body.GetComponent<Body>();
-            bodyComponent.DynamicBody(false);
+            //bodyComponent.DynamicBody(false);
             bodyComponent.RevertLayer();
-
             body = null;
+            myRigidbody.velocity = Vector2.up * jumpVelocity;
         } else {
-            RaycastHit2D newBody = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, bodyLayerMask);
-
+            RaycastHit2D newBody = Physics2D.Raycast(myCollider.bounds.center, moveInput.normalized, 1f, bodyLayerMask);
             if (newBody.collider != null && newBody.collider.gameObject.GetComponent<Body>() != null) {
-                transform.position = new Vector2(newBody.collider.transform.position.x, transform.position.y);
+                transform.position = newBody.collider.transform.position;
                 direction = newBody.transform.localScale.x;
                 body = newBody.collider.gameObject;
                 body.transform.parent = player.transform;
                 transform.parent = body.transform;
-                body.GetComponent<Body>().DynamicBody(true);
                 body.layer = gameObject.layer;
+                body.GetComponent<Body>().Possessed();
             }
         }
     }

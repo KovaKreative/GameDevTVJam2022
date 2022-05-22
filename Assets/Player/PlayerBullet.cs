@@ -5,10 +5,11 @@ using UnityEngine;
 public class PlayerBullet : MonoBehaviour
 {
     [SerializeField] float speed = 8f;
+    [SerializeField] int damage = 10;
 
     Camera cam;
 
-    float direction = 1f;
+    Vector2 direction = Vector2.up;
 
     Rigidbody2D myRigidbody;
 
@@ -30,18 +31,24 @@ public class PlayerBullet : MonoBehaviour
         }
     }
 
-    public void Direction(float dir) {
-        direction = Mathf.Sign(dir);
+    public void Direction(Vector2 dir) {
+        direction = dir;
     }
 
     private void Fire() {
-        Debug.Log(transform.forward);
-        myRigidbody.velocity = transform.rotation.eulerAngles * speed;
+        myRigidbody.velocity = direction * speed;
     }
 
     public void OnTriggerEnter2D(Collider2D collision) {
+        Enemy enemy = collision.gameObject.GetComponentInParent<Enemy>();
+        if (enemy != null) {
+            enemy.Damage(damage);
+            Destroy(gameObject);
+        }
+
         Body body = collision.gameObject.GetComponent<Body>();
         if(body != null) {
+            body.Damage(damage);
             Debug.Log("Bullet hit a body");
         }
 
