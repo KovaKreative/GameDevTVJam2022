@@ -13,7 +13,7 @@ public class HumanAI : MonoBehaviour
     [SerializeField] LayerMask platformLayerMask;
 
     Rigidbody2D myRigidbody;
-    BoxCollider2D myCollider;
+    CapsuleCollider2D myCollider;
     Animator myAnimator;
 
     bool moving = false;
@@ -36,7 +36,7 @@ public class HumanAI : MonoBehaviour
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<BoxCollider2D>();
+        myCollider = GetComponent<CapsuleCollider2D>();
 
         player = FindObjectOfType<PlayerBrain>().transform;
         if (transform.parent != null) {

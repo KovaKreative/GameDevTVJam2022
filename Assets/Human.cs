@@ -13,7 +13,7 @@ public class Human : MonoBehaviour
     [SerializeField] float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
 
-    [SerializeField] GameObject bullet;
+    [SerializeField] Gun gun;
 
     bool moving = false;
     bool isAlive = true;
@@ -24,15 +24,17 @@ public class Human : MonoBehaviour
     float facing = 1f;
 
     bool jumpButton = false;
+    bool onGround = true;
 
-    Animator myAnimator;
+    [SerializeField] Animator myAnimator;
+    [SerializeField] Transform gunArm;
+    [SerializeField] Transform shoulder;
     Rigidbody2D myRigidbody;
     Body body;
     Vector2 moveInput;
 
     // Start is called before the first frame update
     void Start() {
-        myAnimator = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>();
         body = GetComponent<Body>();
     }
@@ -47,19 +49,23 @@ public class Human : MonoBehaviour
             StopAllMotion();
             return;
         }
+        onGround = body.IsGrounded();
         DirectionFacing();
-        //Animations();
+        Animations();
         MovePlayer();
         Jump();
     }
 
     private void MovePlayer() {
 
-        moving = Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y);
+        gunArm.position = (Vector2)shoulder.position + moveInput * 3f;
+
+        moving = Mathf.Abs(moveInput.x) > (Mathf.Abs(moveInput.y) * 0.5);
 
         if (moving) {
             direction = Mathf.Sign(moveInput.x);
             myRigidbody.velocity = new Vector2(direction * moveSpeed, myRigidbody.velocity.y);
+            
         } else {
             myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y);
         }
@@ -72,15 +78,15 @@ public class Human : MonoBehaviour
         transform.localScale = new Vector3(facing, 1f);
     }
 
-    /*
+    
     private void Animations() {
         myAnimator.SetBool("isRunning", moving);
         myAnimator.SetBool("onGround", onGround);
     }
-    */
+    
 
     private void Jump() {
-        coyoteTimeCounter = body.IsGrounded() ? coyoteTime : coyoteTimeCounter - Time.deltaTime;
+        coyoteTimeCounter = onGround ? coyoteTime : coyoteTimeCounter - Time.deltaTime;
         jumpBufferCounter = Mathf.Max(0, jumpBufferCounter - Time.deltaTime);
         if (coyoteTimeCounter > 0 && jumpBufferCounter > 0f) {
             body.Jumping();
@@ -90,12 +96,15 @@ public class Human : MonoBehaviour
         }
     }
 
-    public void Shoot() {
+    public void Shoot(bool isPressed) {
+        /*
         Vector2 aimDirection = moveInput - Vector2.zero;
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.Euler(new Vector3(0, 0, angle)));
         Vector2 shootDir = moveInput == Vector2.zero ? new Vector2(direction, 0f) : moveInput;
         newBullet.GetComponent<PlayerBullet>().Direction(shootDir);
+        */
+        gun.Fire(isPressed);
     }
 
     private void StopAllMotion() {
@@ -124,11 +133,13 @@ public class Human : MonoBehaviour
         }
     }
 
-    void OnFire() {
-        Shoot();
+    void OnFire(InputValue value) {
+        Shoot(value.isPressed);
     }
 
     public void Possess(bool possess) {
         possessed = possess;
+        myAnimator.SetBool("isRunning", moving);
+        myAnimator.SetBool("onGround", onGround);
     }
 }

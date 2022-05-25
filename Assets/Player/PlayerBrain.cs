@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerBrain : MonoBehaviour
 {
+    [SerializeField] float acceleration = 0.1f;
+    [SerializeField] float groundFriction = 0.96f;
     [SerializeField] float moveSpeed = 2f;
     [SerializeField] float jumpVelocity = 6f;
     [SerializeField] float terminalVelocity = 10f;
@@ -68,11 +70,10 @@ public class PlayerBrain : MonoBehaviour
         Debug.DrawRay(myCollider.bounds.center, moveInput.normalized, Color.red);
         moving = Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y);
 
-        if (moving) {
+        if (moving && onGround) {
             direction = Mathf.Sign(moveInput.x);
-            myRigidbody.velocity = new Vector2(direction * moveSpeed, myRigidbody.velocity.y);
-        } else {
-            myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y);
+            myRigidbody.AddForce(Vector2.right * direction);
+            //myRigidbody.velocity = new Vector2(direction * moveSpeed, myRigidbody.velocity.y);
         }
 
         //myRigidbody.velocity = new Vector2(Mathf.Clamp(myRigidbody.velocity.x, -maxSpeed * sprinting, maxSpeed * sprinting), Mathf.Clamp(myRigidbody.velocity.y, -terminalVelocity, terminalVelocity));
@@ -144,6 +145,9 @@ public class PlayerBrain : MonoBehaviour
     private bool IsGrounded() {
         float vSpeed = Mathf.Abs(myRigidbody.velocity.y);
         feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, platformLayerMask);
+        if(feet.collider == null) {
+            feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, bodyLayerMask);
+        }
         //Debug.DrawRay(myCollider.bounds.center, Vector2.down, Color.red);
         return feet.collider != null;
     }
@@ -180,6 +184,7 @@ public class PlayerBrain : MonoBehaviour
             transform.parent = player.transform;
             Body bodyComponent = body.GetComponent<Body>();
             //bodyComponent.DynamicBody(false);
+            bodyComponent.Possessed(false);
             bodyComponent.RevertLayer();
             body = null;
             myRigidbody.velocity = Vector2.up * jumpVelocity;
@@ -187,12 +192,13 @@ public class PlayerBrain : MonoBehaviour
             RaycastHit2D newBody = Physics2D.Raycast(myCollider.bounds.center, moveInput.normalized, 1f, bodyLayerMask);
             if (newBody.collider != null && newBody.collider.gameObject.GetComponent<Body>() != null) {
                 transform.position = newBody.collider.transform.position;
-                direction = newBody.transform.localScale.x;
+                transform.localScale = newBody.transform.localScale;
+
                 body = newBody.collider.gameObject;
                 body.transform.parent = player.transform;
                 transform.parent = body.transform;
                 body.layer = gameObject.layer;
-                body.GetComponent<Body>().Possessed();
+                body.GetComponent<Body>().Possessed(true);
             }
         }
     }

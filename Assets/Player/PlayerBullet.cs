@@ -9,7 +9,7 @@ public class PlayerBullet : MonoBehaviour
 
     Camera cam;
 
-    Vector2 direction = Vector2.up;
+    //Vector2 direction = Vector2.right;
 
     Rigidbody2D myRigidbody;
 
@@ -32,11 +32,15 @@ public class PlayerBullet : MonoBehaviour
     }
 
     public void Direction(Vector2 dir) {
-        direction = dir;
+        //direction = dir;
     }
 
     private void Fire() {
-        myRigidbody.velocity = direction * speed;
+        float z = transform.rotation.eulerAngles.z * Mathf.Deg2Rad;
+        float xSpeed = Mathf.Sin(z);
+        float ySpeed = -Mathf.Cos(z);
+        myRigidbody.velocity = new Vector2(xSpeed * speed, ySpeed * speed);
+        
     }
 
     public void OnTriggerEnter2D(Collider2D collision) {

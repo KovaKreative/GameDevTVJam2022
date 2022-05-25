@@ -9,17 +9,18 @@ public class Body : MonoBehaviour
     bool onGround = true;
 
     [SerializeField] LayerMask platformLayerMask;
+    [SerializeField] LayerMask bodyLayerMask;
     RaycastHit2D feet;
     int layerIndex;
 
     Rigidbody2D myRigidbody;
-    BoxCollider2D myCollider;
+    Collider2D myCollider;
 
     // Start is called before the first frame update
     void Awake()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<BoxCollider2D>();
+        myCollider = GetComponent<Collider2D>();
 
         layerIndex = gameObject.layer;
     }
@@ -29,15 +30,21 @@ public class Body : MonoBehaviour
     {
         bool abandoned = GetComponentInParent<Player>() == null && GetComponentInParent<Enemy>() == null && onGround;
         DynamicBody(!abandoned);
+        OnGround();
+        Debug.DrawRay(myCollider.bounds.center, Vector2.down * myCollider.bounds.size.y * 0.6f, Color.red);
+
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Platform")) {
-            float vSpeed = Mathf.Abs(myRigidbody.velocity.y);
-            feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 0.6f, platformLayerMask);
-            Debug.DrawRay(myCollider.bounds.center, Vector2.down, Color.red);
-            onGround = feet.collider != null;
+
+    }
+
+    private void OnGround() {
+        feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, myCollider.bounds.size.y * 0.6f, platformLayerMask);
+        if (feet.collider == null) {
+            feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, myCollider.bounds.size.y * 0.6f, bodyLayerMask);
         }
+        onGround = feet.collider != null;
     }
 
     public bool IsGrounded() {
@@ -75,9 +82,9 @@ public class Body : MonoBehaviour
         return health;
     }
 
-    public void Possessed() {
-        SendMessage("Possess", true);
-        DynamicBody(true);
+    public void Possessed(bool possess) {
+        SendMessage("Possess", possess);
+        DynamicBody(possess);
     }
     
 }

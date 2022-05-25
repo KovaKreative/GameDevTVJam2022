@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Drone : MonoBehaviour
+public class Tank : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 3f;
-    [SerializeField] float acceleration = 2f;
+    [SerializeField] float jumpVelocity = 7f;
+    [SerializeField] float terminalVelocity = 10f;
+    [SerializeField] float coyoteTime = 0.2f;
+    private float coyoteTimeCounter;
+    [SerializeField] float jumpBufferTime = 0.2f;
+    private float jumpBufferCounter;
 
     [SerializeField] Gun gun;
-
 
     bool moving = false;
     bool isAlive = true;
@@ -18,6 +22,8 @@ public class Drone : MonoBehaviour
     float direction = 1f;
 
     float facing = 1f;
+
+    bool jumpButton = false;
 
     Animator myAnimator;
     Rigidbody2D myRigidbody;
@@ -46,29 +52,34 @@ public class Drone : MonoBehaviour
         //Animations();
         MovePlayer();
         MoveCannon();
+        Jump();
     }
 
     private void MovePlayer() {
 
-        moving = moveInput != Vector2.zero;
-        if (moving) {
-            if (myRigidbody.velocity.magnitude <= moveSpeed) {
-                myRigidbody.AddForce(moveInput * acceleration);
-                //myRigidbody.AddTorque(Mathf.Abs(myRigidbody.rotation) < 30f ? 0.1f * -facing : 0f);
-            }
+        moving = Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y);
+
+        if (moving && body.IsGrounded()) {
+            direction = Mathf.Sign(moveInput.x);
+            myRigidbody.AddForce(Vector2.right * direction * moveSpeed);
+            //myRigidbody.velocity = new Vector2(direction * moveSpeed, myRigidbody.velocity.y);
         }
-        myRigidbody.SetRotation(-myRigidbody.velocity.x);
 
         //myRigidbody.velocity = new Vector2(Mathf.Clamp(myRigidbody.velocity.x, -maxSpeed * sprinting, maxSpeed * sprinting), Mathf.Clamp(myRigidbody.velocity.y, -terminalVelocity, terminalVelocity));
     }
 
     private void MoveCannon() {
-        gun.Rotate(60 * myRigidbody.velocity.x/moveSpeed);
+        bool pivot = Mathf.Abs(moveInput.x) < Mathf.Abs(moveInput.y);
+        
+        if (pivot) {
+            gun.Rotate(moveInput.y);
+        }
     }
 
     private void DirectionFacing() {
-        facing = Mathf.Abs(moveInput.x) > Mathf.Epsilon ? Mathf.Sign(moveInput.x) : facing;
-        head.transform.localScale = new Vector3(facing, 1f);
+        facing = Mathf.Abs(moveInput.x) > Mathf.Epsilon ? Mathf.Sign(moveInput.x) : transform.localScale.x;
+        transform.localScale = new Vector3(facing, 1f);
+        //head.transform.localScale = new Vector3(facing, 1f);
     }
 
     /*
@@ -78,15 +89,24 @@ public class Drone : MonoBehaviour
     }
     */
 
+    private void Jump() {
+        coyoteTimeCounter = body.IsGrounded() ? coyoteTime : coyoteTimeCounter - Time.deltaTime;
+        jumpBufferCounter = Mathf.Max(0, jumpBufferCounter - Time.deltaTime);
+        if (coyoteTimeCounter > 0 && jumpBufferCounter > 0f) {
+            body.Jumping();
+            coyoteTimeCounter = 0;
+            float jumpPower = jumpButton ? jumpVelocity : jumpVelocity * 0.4f;
+            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpPower);
+        }
+    }
+
     public void Shoot(bool isPressed) {
-        gun.Fire(isPressed);
-        /*
         Vector2 aimDirection = moveInput - Vector2.zero;
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-        GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.Euler(new Vector3(0, 0, angle)));
-        Vector2 shootDir = moveInput == Vector2.zero ? new Vector2(direction, 0f) : moveInput;
-        newBullet.GetComponent<PlayerBullet>().Direction(shootDir);
-        */
+        gun.Fire(isPressed);
+        //GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.Euler(new Vector3(0, 0, angle)));
+        //Vector2 shootDir = moveInput == Vector2.zero ? new Vector2(direction, 0f) : moveInput;
+        //newBullet.GetComponent<PlayerBullet>().Direction(shootDir);
     }
 
     private void StopAllMotion() {
@@ -105,9 +125,13 @@ public class Drone : MonoBehaviour
         if (!isAlive) { return; }
 
         if (value.isPressed) {
-
+            jumpButton = true;
+            jumpBufferCounter = jumpBufferTime;
         } else {
-
+            jumpButton = false;
+            if (coyoteTimeCounter < coyoteTime && myRigidbody.velocity.y > 0) {
+                myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, myRigidbody.velocity.y * 0.4f);
+            }
         }
     }
 
@@ -123,4 +147,5 @@ public class Drone : MonoBehaviour
         }
         possessed = possess;
     }
+
 }
