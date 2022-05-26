@@ -67,7 +67,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 7948817802872474972}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b39b0b791b00a6146aa265653fc1509c, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -132,6 +132,10 @@ MonoBehaviour:
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  myAnimator: {fileID: 8746001085520644967}
+  gunArm: {fileID: 7948817802690729530}
+  shoulder: {fileID: 8869647380865158962}
+  gun: {fileID: 370788693}
 --- !u!1001 &1847020161813890391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -415,6 +419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 7778981938030579677, guid: d695dd7e25a50db4899c67af66062682, type: 3}
+  enemyBullet: {fileID: 0}
   autoFire: 1
   fireRate: 0.5
   gunType: 0

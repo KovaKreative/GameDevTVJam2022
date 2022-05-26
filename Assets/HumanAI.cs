@@ -14,15 +14,23 @@ public class HumanAI : MonoBehaviour
 
     Rigidbody2D myRigidbody;
     CapsuleCollider2D myCollider;
-    Animator myAnimator;
+    [SerializeField] Animator myAnimator;
+    [SerializeField] Transform gunArm;
+    [SerializeField] Transform shoulder;
+    [SerializeField] Gun gun;
+
 
     bool moving = false;
+    bool onGround = true;
+    bool shooting = false;
 
     float directionFacing = 1f; 
     
     Transform player;
 
     Enemy enemy;
+
+    Body body;
     bool aiActive = false;
 
     private enum STATE
@@ -37,7 +45,8 @@ public class HumanAI : MonoBehaviour
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<CapsuleCollider2D>();
-
+        body = GetComponent<Body>();
+        
         player = FindObjectOfType<PlayerBrain>().transform;
         if (transform.parent != null) {
             enemy = transform.parent.gameObject.GetComponent<Enemy>();
@@ -70,11 +79,20 @@ public class HumanAI : MonoBehaviour
                 Die();
                 break;
         }
+        onGround = body.IsGrounded();
+        moving = myRigidbody.velocity.magnitude > Mathf.Epsilon;
+        Animations();
+    }
+
+    public void Animations() {
+
+        myAnimator.SetBool("isRunning", moving);
+        myAnimator.SetBool("onGround", onGround);
     }
 
     private void Behaviour() {
         idleCountdown -= Time.deltaTime;
-        if (Random.Range(0f, 100f) < 1f) {
+        if (idleCountdown <= 0f) {
             state = state == STATE.IDLE ? STATE.PATROL : STATE.IDLE;
             directionFacing = Random.value < 0.5f ? 1 : -1;
             idleCountdown = Random.Range(idleTime * 0.5f, idleTime);
@@ -86,6 +104,7 @@ public class HumanAI : MonoBehaviour
     }
 
     void Patrol() {
+        gunArm.position = (Vector2)shoulder.position + new Vector2(0f, -1f);
         Vector2 colliderCenter = myCollider.bounds.center;
         RaycastHit2D arms = Physics2D.BoxCast(colliderCenter, myCollider.size * 0.5f, 0f, Vector2.right * directionFacing, 0.3f, platformLayerMask);
         RaycastHit2D feet = Physics2D.Raycast(colliderCenter, new Vector2(directionFacing, -1f), myCollider.size.y, platformLayerMask);
@@ -95,18 +114,34 @@ public class HumanAI : MonoBehaviour
         if (arms.collider != null || feet.collider == null) {
             directionFacing = -directionFacing;
         }
+
     }
 
     void Aggro() {
-        if(Vector3.Distance(transform.position, player.position) < 3f) {
-            Debug.Log("Player close to enemy");
+        print("Aggo code running");
+        directionFacing = Mathf.Sign(player.position.x - transform.position.x);
+
+        gunArm.position = player.position;
+
+        gun.EnemyFire(shooting);
+
+        if (Vector3.Distance(transform.position, player.position) < 10f) {
+            idleCountdown -= Time.deltaTime;
+            if (idleCountdown <= 0f) {
+                shooting = !shooting;
+                directionFacing = Random.value < 0.5f ? 1 : -1;
+                idleCountdown = Random.Range(idleTime * 0.5f, idleTime);
+            }
         }
     }
 
     void PlayerCheck() {
-        if(Vector3.Distance(transform.position, player.position) < 3f) {
-            print("Close to Player");
-            //state = STATE.AGGRO;
+        Transform head = GetComponentInChildren<Transform>();
+        bool facingPlayer = Mathf.Sign(player.position.x - transform.position.x) == Mathf.Sign(directionFacing);
+        bool obstacle = Physics2D.Linecast(head.position, player.position, platformLayerMask);
+        if(Vector3.Distance(transform.position, player.position) < 5f && facingPlayer && !obstacle) {
+            state = STATE.AGGRO;
+            gunArm.position = player.position;
         }
     }
     

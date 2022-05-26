@@ -31,8 +31,6 @@ public class Body : MonoBehaviour
         bool abandoned = GetComponentInParent<Player>() == null && GetComponentInParent<Enemy>() == null && onGround;
         DynamicBody(!abandoned);
         OnGround();
-        Debug.DrawRay(myCollider.bounds.center, Vector2.down * myCollider.bounds.size.y * 0.6f, Color.red);
-
     }
 
     void OnCollisionEnter2D(Collision2D collision) {

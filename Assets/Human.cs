@@ -79,7 +79,7 @@ public class Human : MonoBehaviour
     }
 
     
-    private void Animations() {
+    public void Animations() {
         myAnimator.SetBool("isRunning", moving);
         myAnimator.SetBool("onGround", onGround);
     }

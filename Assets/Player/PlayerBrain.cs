@@ -67,10 +67,11 @@ public class PlayerBrain : MonoBehaviour
     }
 
     private void MovePlayer() {
-        Debug.DrawRay(myCollider.bounds.center, moveInput.normalized, Color.red);
+        //Debug.DrawRay(myCollider.bounds.center, moveInput.normalized, Color.red);
         moving = Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y);
 
         if (moving && onGround) {
+            myRigidbody.rotation = myRigidbody.rotation * 0.8f;
             direction = Mathf.Sign(moveInput.x);
             myRigidbody.AddForce(Vector2.right * direction);
             //myRigidbody.velocity = new Vector2(direction * moveSpeed, myRigidbody.velocity.y);
@@ -99,20 +100,8 @@ public class PlayerBrain : MonoBehaviour
             float jumpPower = jumpButton ? jumpVelocity : jumpVelocity * 0.4f;
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpPower);
         }
+        Debug.DrawRay(myCollider.bounds.center, Vector2.down * myCollider.bounds.size.y * 0.6f, Color.red);
 
-    }
-
-    public void OnCollisionEnter2D(Collision2D collision) {
-        /*
-        EnemyStats enemy = collision.gameObject.GetComponent<EnemyStats>();
-
-        if (enemy != null) {
-            if (stats.PlayerDamaged(enemy.GetDamage())) {
-                Die();
-            }
-            return;
-        }
-        */
     }
 
     private void Die() {
@@ -126,24 +115,9 @@ public class PlayerBrain : MonoBehaviour
         */
     }
 
-    public void OnTriggerEnter2D(Collider2D collision) {
-        /*
-        PickUp pickup = collision.gameObject.GetComponent<PickUp>();
-
-        if (pickup != null) {
-            pickup.PickedUp();
-            return;
-        }
-
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
-            stats.PlayerDamaged(-1);
-            Die();
-        }
-        */
-    }
-
     private bool IsGrounded() {
         float vSpeed = Mathf.Abs(myRigidbody.velocity.y);
+        
         feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, platformLayerMask);
         if(feet.collider == null) {
             feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, bodyLayerMask);
@@ -176,6 +150,7 @@ public class PlayerBrain : MonoBehaviour
                 myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, myRigidbody.velocity.y * 0.4f);
             }
         }
+
     }
 
     void OnPossess() {

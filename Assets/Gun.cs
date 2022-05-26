@@ -5,6 +5,7 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [SerializeField] GameObject bullet;
+    [SerializeField] GameObject enemyBullet;
     [SerializeField] bool autoFire = false;
     [SerializeField] float fireRate = 3f;
     float fireCooldown = 0f;
@@ -72,6 +73,40 @@ public class Gun : MonoBehaviour
                     case GUN_TYPE.DRONE:
                         bulletOffset = new Vector3(0f, -0.5f, 0f);
                         Instantiate(bullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));
+                        break;
+                    default:
+                        bulletOffset = Vector2.zero;
+                        break;
+                }
+                //GameObject newBullet = 
+            }
+            fireCooldown -= Time.deltaTime;
+        }
+    }
+    public void EnemyFire(bool shooting) {
+        if (shooting) {
+            Vector3 bulletOffset;
+            float rotationOffset = 0f;
+
+            if (fireCooldown <= 0) {
+                fireCooldown = fireRate;
+
+
+                switch (gunType) {
+                    case GUN_TYPE.BIPED:
+                        bulletOffset = Vector3.zero;
+                        rotationOffset = 90f * transform.lossyScale.x;
+
+                        Instantiate(enemyBullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));
+                        break;
+                    case GUN_TYPE.TANK:
+                        bulletOffset = new Vector3(1f, 0f, 0f);
+                        rotationOffset = 90f * transform.lossyScale.x;
+                        Instantiate(enemyBullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));
+                        break;
+                    case GUN_TYPE.DRONE:
+                        bulletOffset = new Vector3(0f, -0.5f, 0f);
+                        Instantiate(enemyBullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));
                         break;
                     default:
                         bulletOffset = Vector2.zero;
