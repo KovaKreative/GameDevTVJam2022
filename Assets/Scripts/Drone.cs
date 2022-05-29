@@ -30,6 +30,7 @@ public class Drone : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>();
         body = GetComponent<Body>();
+        body.AssignTypeName("Drone");
     }
 
     // Update is called once per frame
@@ -58,8 +59,6 @@ public class Drone : MonoBehaviour
             }
         }
         myRigidbody.SetRotation(-myRigidbody.velocity.x);
-
-        //myRigidbody.velocity = new Vector2(Mathf.Clamp(myRigidbody.velocity.x, -maxSpeed * sprinting, maxSpeed * sprinting), Mathf.Clamp(myRigidbody.velocity.y, -terminalVelocity, terminalVelocity));
     }
 
     private void MoveCannon() {
@@ -118,7 +117,7 @@ public class Drone : MonoBehaviour
     public void Possess(bool possess) {
         if (possess) {
             head = GetComponentInChildren<PlayerHead>().gameObject;
-            FrameSwitcher frameSwitcher = FindObjectOfType<FrameSwitcher>();
+            CameraOperations frameSwitcher = FindObjectOfType<CameraOperations>();
             frameSwitcher.SetFrame(3);
         } else {
             head = null;

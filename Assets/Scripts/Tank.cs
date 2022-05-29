@@ -24,8 +24,6 @@ public class Tank : MonoBehaviour
 
     float facing = 1f;
 
-    bool jumpButton = false;
-
     Animator myAnimator;
     Rigidbody2D myRigidbody;
     Body body;
@@ -37,6 +35,7 @@ public class Tank : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>();
         body = GetComponent<Body>();
+        body.AssignTypeName("Tank");
     }
 
     // Update is called once per frame
@@ -53,7 +52,6 @@ public class Tank : MonoBehaviour
         //Animations();
         MovePlayer();
         MoveCannon();
-        Jump();
     }
 
     private void MovePlayer() {
@@ -65,8 +63,6 @@ public class Tank : MonoBehaviour
             myRigidbody.AddForce(Vector2.right * direction * acceleration);
             //myRigidbody.velocity = new Vector2(direction * moveSpeed, myRigidbody.velocity.y);
         }
-
-        //myRigidbody.velocity = new Vector2(Mathf.Clamp(myRigidbody.velocity.x, -maxSpeed * sprinting, maxSpeed * sprinting), Mathf.Clamp(myRigidbody.velocity.y, -terminalVelocity, terminalVelocity));
     }
 
     private void MoveCannon() {
@@ -91,13 +87,9 @@ public class Tank : MonoBehaviour
     */
 
     private void Jump() {
-        coyoteTimeCounter = body.IsGrounded() ? coyoteTime : coyoteTimeCounter - Time.deltaTime;
-        jumpBufferCounter = Mathf.Max(0, jumpBufferCounter - Time.deltaTime);
-        if (coyoteTimeCounter > 0 && jumpBufferCounter > 0f) {
+        if (body.IsGrounded()) {
             body.Jumping();
-            coyoteTimeCounter = 0;
-            float jumpPower = jumpButton ? jumpVelocity : jumpVelocity * 0.4f;
-            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpPower);
+            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpVelocity);
         }
     }
 
@@ -124,16 +116,7 @@ public class Tank : MonoBehaviour
     void OnJump(InputValue value) {
 
         if (!isAlive) { return; }
-
-        if (value.isPressed) {
-            jumpButton = true;
-            jumpBufferCounter = jumpBufferTime;
-        } else {
-            jumpButton = false;
-            if (coyoteTimeCounter < coyoteTime && myRigidbody.velocity.y > 0) {
-                myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, myRigidbody.velocity.y * 0.4f);
-            }
-        }
+        if (value.isPressed) { Jump(); }
     }
 
     void OnFire(InputValue value) {
@@ -143,7 +126,7 @@ public class Tank : MonoBehaviour
     public void Possess(bool possess) {
         if (possess) {
             head = GetComponentInChildren<PlayerHead>().gameObject;
-            FrameSwitcher frameSwitcher = FindObjectOfType<FrameSwitcher>();
+            CameraOperations frameSwitcher = FindObjectOfType<CameraOperations>();
             frameSwitcher.SetFrame(2);
         } else {
             head = null;

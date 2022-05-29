@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] float impactForce = 10f;
     [SerializeField] GameObject sparksParticle;
     [SerializeField] Transform impactPoint;
-    [SerializeField] AudioClip shootSound;
+    [SerializeField] AudioClip damageSound;
     [SerializeField] AudioClip impactSound;
 
     bool projectile = false;
@@ -53,15 +53,25 @@ public class Bullet : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision) {
         Body body = collision.gameObject.GetComponent<Body>();
+        AudioClip sound = impactSound;
         if(body != null) {
             body.Damage(damage, impactForce, impactPoint.position);
-            Debug.Log("Bullet hit a body");
+            sound = damageSound;
         } else {
             Enemy enemy = collision.gameObject.GetComponentInParent<Enemy>();
             if (enemy != null) {
+                sound = damageSound;
                 enemy.Damage(damage);
             }
         }
+
+        BossWeakPoint boss = collision.gameObject.GetComponent<BossWeakPoint>();
+        if(boss != null) {
+            float recoil = Mathf.Sign(collision.transform.position.x - transform.position.x);
+            FindObjectOfType<BossAI>().Damage(damage, recoil);
+        }
+
+        AudioSource.PlayClipAtPoint(sound, transform.position);
         GameObject impact = Instantiate(sparksParticle, impactPoint.position, Quaternion.identity);
         impact.GetComponent<ParticleSystem>().Play();
         Destroy(impact, 1f);

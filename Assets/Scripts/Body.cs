@@ -7,7 +7,7 @@ public class Body : MonoBehaviour
 
     [SerializeField] int maxHealth = 10;
     int health = 0;
-
+    [SerializeField] AudioClip explosionSound;
     [SerializeField] GameObject explosionParticle;
 
     bool onGround = true;
@@ -19,6 +19,8 @@ public class Body : MonoBehaviour
 
     Rigidbody2D myRigidbody;
     Collider2D myCollider;
+
+    string bodyType = "none";
 
     // Start is called before the first frame update
     void Awake()
@@ -38,8 +40,10 @@ public class Body : MonoBehaviour
         OnGround();
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
-
+    public void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
+            FindObjectOfType<GameSession>().PlayerDeath();
+        }
     }
 
     private void OnGround() {
@@ -82,6 +86,7 @@ public class Body : MonoBehaviour
             if (playerHead != null) {
                 playerHead.Dispossess();
             }
+            AudioSource.PlayClipAtPoint(explosionSound, transform.position);
             GameObject explosion = Instantiate(explosionParticle, explosionParticle.transform.position, Quaternion.identity);
             explosion.GetComponent<ParticleSystem>().Play();
             Destroy(explosion, 1f);
@@ -99,7 +104,15 @@ public class Body : MonoBehaviour
         SendMessage("Possess", possess);
         DynamicBody(possess);
     }
-    public int GetHealthPercentage() {
-        return (int)((float)health / (float)maxHealth) * 100;
+    public float GetHealthPercentage() {
+        return ((float)health / (float)maxHealth) * 100f;
+    }
+
+    public string GetTypeName() {
+        return bodyType;
+    }
+
+    public void AssignTypeName(string name) {
+        bodyType = name;
     }
 }

@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 1
-  m_ApplyToSortingLayers: afd1d032257abe8d
+  m_ApplyToSortingLayers: afd1d032257abe8d0f016ff2
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -186,9 +186,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingLayerID: -1916896731
+  m_SortingLayer: 3
+  m_SortingOrder: 10
   m_Sprite: {fileID: -1600520243, guid: 26a47b900d684ca4cb198f4e6d41ae54, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -208,7 +208,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2658662043412244861}
-  m_BodyType: 2
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -219,7 +219,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: 1600173185cfc16459d9110839c95df9, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &2658662043412244860
 MonoBehaviour:
@@ -234,6 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 40
+  explosionSound: {fileID: 8300000, guid: 801bc3ed34d02cd43b58b4c75580abb7, type: 3}
   explosionParticle: {fileID: 6284078528219780794}
   platformLayerMask:
     serializedVersion: 2
@@ -253,8 +254,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36365ab970911e14ca470048e62686c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 9
-  acceleration: 2
+  moveSpeed: 10
+  acceleration: 5
   gun: {fileID: 8538594356609887722}
 --- !u!60 &4421003188688675130
 PolygonCollider2D:
@@ -447,6 +448,18 @@ PrefabInstance:
     - target: {fileID: 3353501255694073080, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353501255694073081, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353501255694073081, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353501255694073081, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1916896731
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}

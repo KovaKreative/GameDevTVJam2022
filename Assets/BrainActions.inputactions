@@ -29,7 +29,7 @@
                     "id": "621e895e-db30-4b6b-a5fa-96f0fec3f737",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(behavior=2)",
+                    "interactions": "Press",
                     "initialStateCheck": true
                 },
                 {
@@ -38,7 +38,7 @@
                     "id": "81f01ecf-3caf-4501-9e97-b11ab6aadfd9",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press",
+                    "interactions": "Press(behavior=2)",
                     "initialStateCheck": true
                 },
                 {
@@ -47,7 +47,7 @@
                     "id": "b474b4c6-886e-4720-b3e8-03fb4f9fc29a",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "initialStateCheck": false
                 }
             ],
@@ -781,7 +781,7 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
+                    "groups": "Keyboard&Mouse;Gamepad",
                     "action": "Quit",
                     "isComposite": false,
                     "isPartOfComposite": false

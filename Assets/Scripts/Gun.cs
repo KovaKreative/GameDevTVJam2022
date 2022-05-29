@@ -8,6 +8,8 @@ public class Gun : MonoBehaviour
     [SerializeField] GameObject enemyBullet;
     [SerializeField] bool autoFire = false;
     [SerializeField] float fireRate = 3f;
+    [SerializeField] AudioClip shootSound;
+
     float fireCooldown = 0f;
     bool firing = false;
 
@@ -60,27 +62,26 @@ public class Gun : MonoBehaviour
 
                 switch (gunType) {
                     case GUN_TYPE.BIPED:
-                        bulletOffset = Vector3.zero;
+                        bulletOffset = new Vector3(1f, 0f, 0f);
                         rotationOffset = 90f * transform.lossyScale.x;
-
-                        Instantiate(bullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));
                         break;
                     case GUN_TYPE.TANK:
                         bulletOffset = new Vector3(1f, 0f, 0f);
                         rotationOffset = 90f * transform.lossyScale.x;
-                        Instantiate(bullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));
                         break;
                     case GUN_TYPE.DRONE:
                         bulletOffset = new Vector3(0f, -1f, 0f);
-                        Instantiate(bullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));
                         break;
                     default:
                         bulletOffset = Vector2.zero;
                         break;
                 }
+                AudioSource.PlayClipAtPoint(shootSound, transform.position);
+                Instantiate(bullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));
+
                 //GameObject newBullet = 
             }
-            
+
         }
         fireCooldown -= Time.deltaTime;
     }
@@ -92,7 +93,7 @@ public class Gun : MonoBehaviour
                 fireCooldown = fireRate;
                 switch (gunType) {
                     case GUN_TYPE.BIPED:
-                        bulletOffset = Vector3.zero;
+                        bulletOffset = new Vector3(1f, 0f, 0f);
                         rotationOffset = 90f * transform.lossyScale.x;
 
                         Instantiate(enemyBullet, transform.TransformPoint(bulletOffset.x, bulletOffset.y, 0f), transform.rotation * Quaternion.Euler(0f, 0f, rotationOffset));

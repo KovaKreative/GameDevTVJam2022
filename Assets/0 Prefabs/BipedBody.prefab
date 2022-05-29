@@ -57,7 +57,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!70 &7948817802872474960
 CapsuleCollider2D:
@@ -72,8 +72,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.12499714, y: -1.3227415}
-  m_Size: {x: 1.4061337, y: 3.4201536}
+  m_Offset: {x: 0.12499714, y: -1.4540936}
+  m_Size: {x: 1.4061337, y: 3.1574495}
   m_Direction: 0
 --- !u!114 &7948817802872474975
 MonoBehaviour:
@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 50
+  explosionSound: {fileID: 8300000, guid: b89723309090da647b00061d58e3b202, type: 3}
   explosionParticle: {fileID: 7334327262264313026}
   platformLayerMask:
     serializedVersion: 2
@@ -107,12 +108,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96fb9cb1dbfad9e46a3d631b454de779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  jumpVelocity: 7
+  moveSpeed: 7
+  jumpVelocity: 8
   damageTime: 0.3
   iFramesTime: 1
-  coyoteTime: 0.2
-  jumpBufferTime: 0.2
   gun: {fileID: 370788693}
   myAnimator: {fileID: 8746001085520644967}
   gunArm: {fileID: 7948817802690729530}
@@ -129,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b05fcdde3fc70be459d5e8f09e3f717c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 3
   chaseSpeed: 3.5
   damageTime: 0.3
   iFramesTime: 1
@@ -367,6 +366,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 331249188681422108, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 331249188681422108, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
       value: -1916896731
       objectReference: {fileID: 0}
@@ -447,6 +450,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4557699430896552806, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557699430896552806, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
       value: -1916896731
       objectReference: {fileID: 0}
@@ -475,6 +482,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5643325854092319439, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5643325854092319439, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
       value: -1916896731
       objectReference: {fileID: 0}
@@ -485,6 +496,10 @@ PrefabInstance:
     - target: {fileID: 5693141699731278352, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5693141699731278352, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 5693141699731278352, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
@@ -587,6 +602,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7371548464686500033, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371548464686500033, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
       value: -1916896731
       objectReference: {fileID: 0}
@@ -611,6 +630,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7675740194286661465, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7675740194286661465, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
       value: -1916896731
       objectReference: {fileID: 0}
@@ -631,6 +654,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8294046602506942436, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8294046602506942436, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
       value: -1916896731
       objectReference: {fileID: 0}
@@ -647,6 +674,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8520004716792789438, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8520004716792789438, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
       value: -1916896731
       objectReference: {fileID: 0}
@@ -657,6 +688,10 @@ PrefabInstance:
     - target: {fileID: 8634274539008949777, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8634274539008949777, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 8634274539008949777, guid: 8219dd3e0eee57642b616723b3d35a32, type: 3}
       propertyPath: m_SortingLayerID
@@ -753,6 +788,7 @@ MonoBehaviour:
   enemyBullet: {fileID: 7778981938030579677, guid: a75efd96cb3a28548b1735f99cc31980, type: 3}
   autoFire: 1
   fireRate: 0.4
+  shootSound: {fileID: 8300000, guid: af7ca0b7926b21846b7e134f53c979ee, type: 3}
   gunType: 0
 --- !u!1 &7613353256028787458 stripped
 GameObject:

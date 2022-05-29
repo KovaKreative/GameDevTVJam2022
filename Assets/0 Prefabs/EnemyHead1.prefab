@@ -11,6 +11,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.516
       objectReference: {fileID: 0}
+    - target: {fileID: 3959768236584199041, guid: b50356dfb05e5e24e86da2e746553bfc, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3959768236584199041, guid: b50356dfb05e5e24e86da2e746553bfc, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[0]
+      value: -1916896731
+      objectReference: {fileID: 0}
+    - target: {fileID: 3959768236584199041, guid: b50356dfb05e5e24e86da2e746553bfc, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[1]
+      value: 852545967
+      objectReference: {fileID: 0}
     - target: {fileID: 9097141458088032436, guid: b50356dfb05e5e24e86da2e746553bfc, type: 3}
       propertyPath: m_Name
       value: EnemyHead1

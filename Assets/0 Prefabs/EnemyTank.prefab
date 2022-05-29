@@ -151,7 +151,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1208261703, guid: 7cfe86d9ddb3dc64cb77172ac77643e1, type: 3}
       propertyPath: acceleration
-      value: 80
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2011907129, guid: 7cfe86d9ddb3dc64cb77172ac77643e1, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4453111937827631915, guid: 7cfe86d9ddb3dc64cb77172ac77643e1, type: 3}
       propertyPath: m_RootOrder
@@ -211,7 +215,7 @@ PrefabInstance:
       objectReference: {fileID: 1560553800928328352}
     - target: {fileID: 6064182646444223254, guid: 7cfe86d9ddb3dc64cb77172ac77643e1, type: 3}
       propertyPath: acceleration
-      value: 70
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6064182646444223254, guid: 7cfe86d9ddb3dc64cb77172ac77643e1, type: 3}
       propertyPath: platformLayerMask.m_Bits

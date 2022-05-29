@@ -16,6 +16,10 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7778981938030579664, guid: d695dd7e25a50db4899c67af66062682, type: 3}
+      propertyPath: impactSound
+      value: 
+      objectReference: {fileID: 8300000, guid: b89723309090da647b00061d58e3b202, type: 3}
+    - target: {fileID: 7778981938030579664, guid: d695dd7e25a50db4899c67af66062682, type: 3}
       propertyPath: sparksParticle
       value: 
       objectReference: {fileID: 3421882320240395431, guid: d53eea491d8c0b34f80c3a367b5e6ef0, type: 3}
@@ -35,6 +39,22 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.5134417
       objectReference: {fileID: 0}
+    - target: {fileID: 7778981938030579665, guid: d695dd7e25a50db4899c67af66062682, type: 3}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778981938030579665, guid: d695dd7e25a50db4899c67af66062682, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778981938030579665, guid: d695dd7e25a50db4899c67af66062682, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1916896731
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778981938030579665, guid: d695dd7e25a50db4899c67af66062682, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     - target: {fileID: 7778981938030579666, guid: d695dd7e25a50db4899c67af66062682, type: 3}
       propertyPath: m_Size.x
       value: 0.5
@@ -70,6 +90,14 @@ PrefabInstance:
     - target: {fileID: 7778981938030579670, guid: d695dd7e25a50db4899c67af66062682, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778981938030579670, guid: d695dd7e25a50db4899c67af66062682, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5625
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778981938030579670, guid: d695dd7e25a50db4899c67af66062682, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7871287
       objectReference: {fileID: 0}
     - target: {fileID: 7778981938030579670, guid: d695dd7e25a50db4899c67af66062682, type: 3}
       propertyPath: m_LocalPosition.x

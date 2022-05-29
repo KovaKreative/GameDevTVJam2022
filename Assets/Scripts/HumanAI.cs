@@ -195,7 +195,6 @@ public class HumanAI : MonoBehaviour
     private void Invincible() {
         if (iFrames > 0) {
             iFrames = Mathf.Max(0f, iFrames - Time.deltaTime);
-            print(Time.realtimeSinceStartup);
             float alpha = Mathf.Sin(Time.realtimeSinceStartup * 100) * 0.5f;
             SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
             for (int i = 0; i < sprites.Length; i++) {

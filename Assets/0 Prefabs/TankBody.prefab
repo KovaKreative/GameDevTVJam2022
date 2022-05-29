@@ -77,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingLayerID: -1916896731
+  m_SortingLayer: 3
+  m_SortingOrder: 10
   m_Sprite: {fileID: -88340564, guid: fd54cbf65883e5248a5dd065a74b0648, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -103,14 +103,14 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 8
+  m_Mass: 5
   m_LinearDrag: 0.5
   m_AngularDrag: 0
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 1600173185cfc16459d9110839c95df9, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &4453111937827631914
 MonoBehaviour:
@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  explosionSound: {fileID: 8300000, guid: 801bc3ed34d02cd43b58b4c75580abb7, type: 3}
   explosionParticle: {fileID: 6434106368664650922}
   platformLayerMask:
     serializedVersion: 2
@@ -190,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9f1625940c3b6c46bf28237d119dfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 70
+  acceleration: 60
   jumpVelocity: 8
   terminalVelocity: 10
   coyoteTime: 0.2
@@ -209,20 +210,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a269d3cf3fb82a4289c9488e9556c5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 70
+  acceleration: 60
   chaseSpeed: 3.5
   damageTime: 0.3
   iFramesTime: 1
   moveCannon: 2
-  idleTime: 2
+  idleTime: 1
   lineOfSightDistance: 10
   aggroLimitDistance: 10
   seekLight: {fileID: 0}
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   cannonRotateSpeed: 7
-  gun: {fileID: 0}
+  gun: {fileID: 2011907130}
 --- !u!1001 &3069896448155575319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -413,6 +414,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 859372211, guid: fd54cbf65883e5248a5dd065a74b0648, type: 3}
+    - target: {fileID: 3353501255694073081, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353501255694073081, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1916896731
+      objectReference: {fileID: 0}
     - target: {fileID: 3353501255694073082, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
       propertyPath: bullet
       value: 
@@ -425,6 +434,10 @@ PrefabInstance:
       propertyPath: fireRate
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 3353501255694073082, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
+      propertyPath: shootSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 2cb2a023799931245a1be3cc84f9f777, type: 3}
     - target: {fileID: 3353501255694073082, guid: 8f9b2013c336e3740a334fc4f1e2ec5c, type: 3}
       propertyPath: enemyBullet
       value: 

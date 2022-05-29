@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI currentBody;
     [SerializeField] ProgressBar healthBar;
     int bodyHealth = 0;
     Body body;
@@ -15,11 +17,12 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        bodyHealth = body == null ? 0 : body.GetHealthPercentage();
+        bodyHealth = body == null ? 0 : (int)body.GetHealthPercentage();
         healthBar.BarValue = bodyHealth;
     }
 
-    public void HaveBody (Body getBody){
+    public void HaveBody (Body getBody, string bodyType){
         body = getBody;
+        currentBody.text = bodyType;
     }
 }

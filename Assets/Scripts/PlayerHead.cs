@@ -7,13 +7,13 @@ public class PlayerHead : MonoBehaviour
     [SerializeField] float groundFriction = 0.96f;
     [SerializeField] float moveSpeed = 2f;
     [SerializeField] float jumpVelocity = 6f;
-    [SerializeField] float terminalVelocity = 10f;
-    [SerializeField] float coyoteTime = 0.1f;
-    private float coyoteTimeCounter;
-    [SerializeField] float jumpBufferTime = 0.1f;
-    private float jumpBufferCounter;
 
+    [SerializeField] GameObject laserBullet;
+    [SerializeField] Transform laserOrigin;
+    [SerializeField] AudioClip laserSound;
+    [SerializeField] AudioClip explosionSound;
     [SerializeField] GameObject explosionParticle;
+    [SerializeField] ParticleSystem attractParticle;
 
     [SerializeField] LayerMask platformLayerMask;
     [SerializeField] LayerMask bodyLayerMask;
@@ -30,7 +30,7 @@ public class PlayerHead : MonoBehaviour
 
     float facing = 1f;
 
-    bool jumpButton = false;
+    bool possess = false;
 
     RaycastHit2D feet;
 
@@ -50,9 +50,11 @@ public class PlayerHead : MonoBehaviour
         player = transform.parent.gameObject;
     }
 
+    bool isActive = true;
+
     // Update is called once per frame
     void FixedUpdate() {
-        if (!isAlive) {
+        if (!isAlive || !isActive) {
             StopAllMotion();
             return;
         }
@@ -68,22 +70,23 @@ public class PlayerHead : MonoBehaviour
         //Animations();
         MovePlayer();
         onGround = IsGrounded();
-        Jump();
         Invincible();
+        AttemptPossession();
     }
 
     private void MovePlayer() {
         //Debug.DrawRay(myCollider.bounds.center, moveInput.normalized, Color.red);
         moving = Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y);
-
-        if (moving && onGround) {
-            myRigidbody.rotation = myRigidbody.rotation * 0.8f;
+        myRigidbody.rotation = myRigidbody.rotation * 0.8f;
+        if (moving) {
             direction = Mathf.Sign(moveInput.x);
-            myRigidbody.AddForce(Vector2.right * direction * acceleration);
-            //myRigidbody.velocity = new Vector2(direction * moveSpeed, myRigidbody.velocity.y);
+            if (onGround) {
+                
+                myRigidbody.AddForce(Vector2.right * direction * acceleration);
+            } else {
+                myRigidbody.velocity = new Vector2(myRigidbody.velocity.x + (Mathf.Sign(direction) * 0.1f), myRigidbody.velocity.y);
+            }
         }
-
-        //myRigidbody.velocity = new Vector2(Mathf.Clamp(myRigidbody.velocity.x, -maxSpeed * sprinting, maxSpeed * sprinting), Mathf.Clamp(myRigidbody.velocity.y, -terminalVelocity, terminalVelocity));
     }
 
     private void DirectionFacing() {
@@ -99,19 +102,16 @@ public class PlayerHead : MonoBehaviour
     */
 
     private void Jump() {
-        coyoteTimeCounter = onGround ? coyoteTime : coyoteTimeCounter - Time.deltaTime;
-        jumpBufferCounter = Mathf.Max(0, jumpBufferCounter - Time.deltaTime);
-        if (coyoteTimeCounter > 0 && jumpBufferCounter > 0f) {
-            coyoteTimeCounter = 0;
-            float jumpPower = jumpButton ? jumpVelocity : jumpVelocity * 0.4f;
-            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpPower);
+        if (onGround) {
+            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpVelocity);
         }
-        Debug.DrawRay(myCollider.bounds.center, Vector2.down * myCollider.bounds.size.y * 0.6f, Color.red);
-
+        //Debug.DrawRay(myCollider.bounds.center, Vector2.down * myCollider.bounds.size.y * 0.6f, Color.red);
     }
 
     private void Die() {
+        isAlive = false;
         gameObject.SetActive(false);
+        AudioSource.PlayClipAtPoint(explosionSound, transform.position);
         GameObject explosion = Instantiate(explosionParticle, explosionParticle.transform.position, Quaternion.identity);
         explosion.GetComponent<ParticleSystem>().Play();
         Destroy(explosion, 1f);
@@ -119,8 +119,6 @@ public class PlayerHead : MonoBehaviour
     }
 
     private bool IsGrounded() {
-        float vSpeed = Mathf.Abs(myRigidbody.velocity.y);
-        
         feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, platformLayerMask);
         if(feet.collider == null) {
             feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, bodyLayerMask);
@@ -133,10 +131,46 @@ public class PlayerHead : MonoBehaviour
         myRigidbody.velocity = new Vector2(Mathf.Abs(myRigidbody.velocity.x) < Mathf.Epsilon ? 0f : myRigidbody.velocity.x * 0.9f, onGround ? 0f : myRigidbody.velocity.y);
     }
 
+    private void AttemptPossession() {
+        if (possess && !isPossessing) {
+            if (!attractParticle.isPlaying) {
+                attractParticle.Play();
+            }
+            //Body closestBody = null;
+
+            Collider2D checkBody = Physics2D.OverlapCircle(attractParticle.transform.position, 1.5f, bodyLayerMask);
+
+            if(checkBody != null) {
+                Possess(checkBody.GetComponent<Body>());
+                attractParticle.Stop();
+            }
+            /*
+            Body[] bodies = FindObjectsOfType<Body>();
+            foreach (Body body in bodies) {
+                float dist = Vector2.Distance(body.transform.position, transform.position);
+                if (closestBody == null || dist < Vector2.Distance(closestBody.transform.position, transform.position)) {
+                    closestBody = body;
+                }
+            }
+
+            if (closestBody != null && ) {
+                Possess(closestBody);
+                attractParticle.Stop();
+            }
+            */
+        } else {
+            attractParticle.Stop();
+        }
+    }
+
     public void OnTriggerEnter2D(Collider2D collision) {
         Bullet enemyBullet = collision.gameObject.GetComponent<Bullet>();
         if(enemyBullet != null) {
             Die();
+        }
+
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
+            FindObjectOfType<GameSession>().PlayerDeath();
         }
     }
 
@@ -149,41 +183,24 @@ public class PlayerHead : MonoBehaviour
 
     void OnJump(InputValue value) {
 
-        if (!isAlive) { return; }
-
-        if (value.isPressed) {
-            jumpButton = true;
-            jumpBufferCounter = jumpBufferTime;
-        } else {
-            jumpButton = false;
-            if (coyoteTimeCounter < coyoteTime && myRigidbody.velocity.y > 0) {
-                myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, myRigidbody.velocity.y * 0.4f);
-            }
-        }
+        if (!isAlive || isPossessing) { return; }
+        if (value.isPressed) { Jump(); }
 
     }
 
-    void OnPossess() {
-        if (isPossessing) {
+    void OnPossess(InputValue value) {
+        if (isPossessing && value.isPressed) {
             Dispossess();
         } else {
-            RaycastHit2D newBody = Physics2D.Raycast(myCollider.bounds.center, moveInput.normalized, 1f, bodyLayerMask);
-            if (newBody.collider != null && newBody.collider.gameObject.GetComponent<Body>() != null) {
-                transform.position = newBody.collider.transform.position;
-                transform.localScale = newBody.transform.localScale;
-                transform.localRotation = Quaternion.identity;
-                body = newBody.collider.gameObject;
-                body.transform.parent = player.transform;
-                transform.parent = body.transform;
-                body.layer = gameObject.layer;
-                GetComponentInParent<Player>().HaveBody(body.GetComponent<Body>());
-                body.GetComponent<Body>().Possessed(true);
-            }
+            possess = value.isPressed;
         }
     }
 
-    void OnFire() {
-
+    void OnFire(InputValue value) {
+        if (!isPossessing && value.isPressed) {
+            AudioSource.PlayClipAtPoint(laserSound, transform.position);
+            Instantiate(laserBullet, laserOrigin.position, transform.rotation * Quaternion.Euler(0f, 0f, 90f * direction));
+        }
     }
 
     public void Dispossess() {
@@ -194,11 +211,24 @@ public class PlayerHead : MonoBehaviour
         bodyComponent.Possessed(false);
         bodyComponent.RevertLayer();
         body = null;
-        GetComponentInParent<Player>().HaveBody(null);
+        GetComponentInParent<Player>().HaveBody(null, "none");
         myRigidbody.velocity = Vector2.up * jumpVelocity;
-        FrameSwitcher frameSwitcher = FindObjectOfType<FrameSwitcher>();
+        CameraOperations frameSwitcher = FindObjectOfType<CameraOperations>();
         frameSwitcher.SetFrame(0);
         iFrames = iFramesTime;
+    }
+
+    public void Possess(Body newBody) {
+        possess = false;
+        transform.position = newBody.transform.position;
+        transform.localScale = newBody.transform.localScale;
+        transform.localRotation = Quaternion.identity;
+        body = newBody.gameObject;
+        body.transform.parent = player.transform;
+        transform.parent = body.transform;
+        body.layer = gameObject.layer;
+        GetComponentInParent<Player>().HaveBody(body.GetComponent<Body>(), newBody.GetTypeName());
+        body.GetComponent<Body>().Possessed(true);
     }
 
     private void Invincible() {
@@ -210,5 +240,9 @@ public class PlayerHead : MonoBehaviour
                 sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, iFrames > 0 ? 1 - alpha : 1f);
             }
         }
+    }
+
+    public void LevelExit() {
+        isActive = false;
     }
 }

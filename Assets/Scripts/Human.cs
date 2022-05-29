@@ -13,12 +13,10 @@ public class Human : MonoBehaviour
     [SerializeField] float iFramesTime = 1f;
     float iFrames = 0f;
 
-    [SerializeField] float coyoteTime = 0.2f;
+    float coyoteTime = 0.2f;
     private float coyoteTimeCounter;
-    [SerializeField] float jumpBufferTime = 0.2f;
+    float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
-
-    [SerializeField] Gun gun;
 
     bool moving = false;
     bool isAlive = true;
@@ -28,9 +26,11 @@ public class Human : MonoBehaviour
 
     float facing = 1f;
 
-    bool jumpButton = false;
     bool onGround = true;
 
+    bool holdPosition = false;
+
+    [SerializeField] Gun gun;
     [SerializeField] Animator myAnimator;
     [SerializeField] Transform gunArm;
     [SerializeField] Transform shoulder;
@@ -42,6 +42,7 @@ public class Human : MonoBehaviour
     void Start() {
         myRigidbody = GetComponent<Rigidbody2D>();
         body = GetComponent<Body>();
+        body.AssignTypeName("Biped");
     }
 
     // Update is called once per frame
@@ -57,7 +58,6 @@ public class Human : MonoBehaviour
         DirectionFacing();
         Animations();
         MovePlayer();
-        Jump();
         Invincible();
         damage = Mathf.Max(0f, damage - Time.deltaTime);
     }
@@ -73,12 +73,14 @@ public class Human : MonoBehaviour
             velocityX = 1f;
             //myRigidbody.velocity = new Vector2(direction * moveSpeed, myRigidbody.velocity.y);
         }
+
         if (damage <= 0f) {
             myRigidbody.velocity = new Vector2(direction * moveSpeed * velocityX, myRigidbody.velocity.y);
         }
 
-
-        //myRigidbody.velocity = new Vector2(Mathf.Clamp(myRigidbody.velocity.x, -maxSpeed * sprinting, maxSpeed * sprinting), Mathf.Clamp(myRigidbody.velocity.y, -terminalVelocity, terminalVelocity));
+        if (holdPosition) {
+            myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y);
+        }
     }
 
     private void DirectionFacing() {
@@ -87,18 +89,14 @@ public class Human : MonoBehaviour
     }
     
     public void Animations() {
-        myAnimator.SetBool("isRunning", moving);
+        myAnimator.SetBool("isRunning", Mathf.Abs(myRigidbody.velocity.x) > 0.1f);
         myAnimator.SetBool("onGround", onGround);
     }
     
     private void Jump() {
-        coyoteTimeCounter = onGround ? coyoteTime : coyoteTimeCounter - Time.deltaTime;
-        jumpBufferCounter = Mathf.Max(0, jumpBufferCounter - Time.deltaTime);
-        if (coyoteTimeCounter > 0 && jumpBufferCounter > 0f) {
+        if (onGround) {
             body.Jumping();
-            coyoteTimeCounter = 0;
-            float jumpPower = jumpButton ? jumpVelocity : jumpVelocity * 0.4f;
-            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpPower);
+            myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpVelocity);
         }
     }
 
@@ -140,26 +138,25 @@ public class Human : MonoBehaviour
     void OnJump(InputValue value) {
 
         if (!isAlive) { return; }
-
-        if (value.isPressed) {
-            jumpButton = true;
-            jumpBufferCounter = jumpBufferTime;
-        } else {
-            jumpButton = false;
-            if (coyoteTimeCounter < coyoteTime && myRigidbody.velocity.y > 0) {
-                myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, myRigidbody.velocity.y * 0.4f);
-            }
-        }
+        if (value.isPressed) { Jump(); }
     }
 
     void OnFire(InputValue value) {
         Shoot(value.isPressed);
     }
 
+    void OnStopMoving(InputValue value) {
+        if (value.isPressed) {
+            holdPosition = true;
+        } else {
+            holdPosition = false;
+        }
+    }
+
     public void Possess(bool possess) {
         possessed = possess;
         if (possess) {
-            FrameSwitcher frameSwitcher = FindObjectOfType<FrameSwitcher>();
+            CameraOperations frameSwitcher = FindObjectOfType<CameraOperations>();
             frameSwitcher.SetFrame(1);
             iFrames = iFramesTime;
         } else {

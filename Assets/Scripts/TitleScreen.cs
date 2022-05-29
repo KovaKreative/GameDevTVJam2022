@@ -23,6 +23,10 @@ public class TitleScreen : MonoBehaviour
         SceneManager.LoadSceneAsync(1);
     }
 
+    public void EndGame() {
+        SceneManager.LoadSceneAsync(0);
+    }
+
     void OnQuit() {
         Application.Quit();
     }
