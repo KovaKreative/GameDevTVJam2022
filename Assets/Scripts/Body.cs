@@ -13,7 +13,7 @@ public class Body : MonoBehaviour
     bool onGround = true;
 
     [SerializeField] LayerMask platformLayerMask;
-    [SerializeField] LayerMask bodyLayerMask;
+
     RaycastHit2D feet;
     int layerIndex;
 
@@ -42,15 +42,12 @@ public class Body : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
-            FindObjectOfType<GameSession>().PlayerDeath();
+            GetComponentInParent<Player>().PlayerDead();
         }
     }
 
     private void OnGround() {
         feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, myCollider.bounds.size.y * 0.6f, platformLayerMask);
-        if (feet.collider == null) {
-            feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, myCollider.bounds.size.y * 0.6f, bodyLayerMask);
-        }
         onGround = feet.collider != null;
     }
 
@@ -84,7 +81,7 @@ public class Body : MonoBehaviour
         if (health <= 0) {
             PlayerHead playerHead = GetComponentInChildren<PlayerHead>();
             if (playerHead != null) {
-                playerHead.Dispossess();
+                playerHead.Dispossess(true);
             }
             AudioSource.PlayClipAtPoint(explosionSound, transform.position);
             GameObject explosion = Instantiate(explosionParticle, explosionParticle.transform.position, Quaternion.identity);
@@ -114,5 +111,9 @@ public class Body : MonoBehaviour
 
     public void AssignTypeName(string name) {
         bodyType = name;
+    }
+
+    private void ResetPosition(Vector3 pos) {
+        transform.position = pos;
     }
 }

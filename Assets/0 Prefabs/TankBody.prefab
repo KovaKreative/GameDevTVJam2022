@@ -129,7 +129,10 @@ MonoBehaviour:
   explosionParticle: {fileID: 6434106368664650922}
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 9472
+  ledgeLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   bodyLayerMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -221,7 +224,7 @@ MonoBehaviour:
   seekLight: {fileID: 0}
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 9472
   cannonRotateSpeed: 7
   gun: {fileID: 2011907130}
 --- !u!1001 &3069896448155575319

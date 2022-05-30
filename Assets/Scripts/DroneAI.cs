@@ -150,4 +150,8 @@ public class DroneAI : MonoBehaviour
             enemy.FinishDieSequence();
         }
     }
+
+    public void OnCollisionEnter2D(Collision2D collision) {
+        targetPosition = startPosition + (Random.insideUnitCircle * patrolRadius);
+    }
 }

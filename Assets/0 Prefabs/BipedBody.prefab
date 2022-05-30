@@ -50,10 +50,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
+  m_Mass: 2
+  m_LinearDrag: 0.5
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -92,10 +92,7 @@ MonoBehaviour:
   explosionParticle: {fileID: 7334327262264313026}
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 256
-  bodyLayerMask:
-    serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 9472
 --- !u!114 &7948817802872474974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  jumpVelocity: 8
+  jumpVelocity: 18
   damageTime: 0.3
   iFramesTime: 1
   gun: {fileID: 370788693}
@@ -138,7 +135,10 @@ MonoBehaviour:
   seekLight: {fileID: 0}
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 8448
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
   myAnimator: {fileID: 8746001085520644967}
   gunArm: {fileID: 7948817802690729530}
   shoulder: {fileID: 8869647380865158962}

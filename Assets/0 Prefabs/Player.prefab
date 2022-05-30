@@ -4970,8 +4970,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 5
   groundFriction: 0.96
-  moveSpeed: 3
-  jumpVelocity: 14
+  moveSpeed: 5
+  jumpVelocity: 18
   laserBullet: {fileID: 1563928975292454337, guid: c07d7fff503e1144d86c771efe65c9ec, type: 3}
   laserOrigin: {fileID: 271924543450642590}
   laserSound: {fileID: 8300000, guid: af7ca0b7926b21846b7e134f53c979ee, type: 3}
@@ -4980,7 +4980,7 @@ MonoBehaviour:
   attractParticle: {fileID: 637007073}
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 9600
   bodyLayerMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -5087,6 +5087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bb1d24b3bd40e746aeaeab48df932a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneResetDelay: 2
   currentBody: {fileID: 0}
   healthBar: {fileID: 0}
 --- !u!1001 &7118540108461578857

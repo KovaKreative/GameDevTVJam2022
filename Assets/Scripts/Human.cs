@@ -30,6 +30,8 @@ public class Human : MonoBehaviour
 
     bool holdPosition = false;
 
+    Vector2 originalScale = Vector2.one;
+
     [SerializeField] Gun gun;
     [SerializeField] Animator myAnimator;
     [SerializeField] Transform gunArm;
@@ -40,6 +42,7 @@ public class Human : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
+        originalScale = transform.localScale;
         myRigidbody = GetComponent<Rigidbody2D>();
         body = GetComponent<Body>();
         body.AssignTypeName("Biped");
@@ -85,7 +88,7 @@ public class Human : MonoBehaviour
 
     private void DirectionFacing() {
         facing = Mathf.Abs(moveInput.x) > Mathf.Epsilon ? Mathf.Sign(moveInput.x) : transform.localScale.x;
-        transform.localScale = new Vector3(facing, 1f);
+        transform.localScale = new Vector3(facing, 1f) * originalScale;
     }
     
     public void Animations() {

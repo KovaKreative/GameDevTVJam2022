@@ -6,20 +6,26 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TitleScreen.unity
+    path: Assets/Scenes/0TitleScreen.unity
     guid: ea3ea80a67c7d714fb1001f04e998f9c
   - enabled: 1
-    path: Assets/Scenes/Level1.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/1Street.unity
+    guid: 8c65ea1e2d25a624ca23be9795763c42
   - enabled: 1
-    path: Assets/Scenes/Level2.unity
-    guid: 9e2f9de6ffb48914ab4718b8ad0c6801
+    path: Assets/Scenes/2Street.unity
+    guid: 0755a410f180544478e8bd62f43e3fa0
   - enabled: 1
-    path: Assets/Scenes/Level3.unity
-    guid: a60bf9a48d3d9b84187abd0b1a9aa292
+    path: Assets/Scenes/3Ascending.unity
+    guid: 8c36c9edacd0b8944b61a8eb55cc283a
   - enabled: 1
-    path: Assets/Scenes/LevelBoss.unity
-    guid: 33b7019adf513a544a95e16af4a9e80d
+    path: Assets/Scenes/4Boss1.unity
+    guid: cab188b1322565a4a84ff6ee807eae7a
+  - enabled: 1
+    path: Assets/Scenes/5ObstacleCourse.unity
+    guid: 4254735fcb0a1fc4587693de1916518c
+  - enabled: 1
+    path: Assets/Scenes/6Boss2.unity
+    guid: 46ec8d6848d6ee84dab8f273eec1e183
   - enabled: 1
     path: Assets/Scenes/EndScreen.unity
     guid: 66888eac1462d174c93237bbec31d92a

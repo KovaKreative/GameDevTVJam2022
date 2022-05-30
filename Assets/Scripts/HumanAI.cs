@@ -22,6 +22,7 @@ public class HumanAI : MonoBehaviour
     [SerializeField] Light2D seekLight;
 
     [SerializeField] LayerMask platformLayerMask;
+    [SerializeField] LayerMask obstacleMask;
 
     Rigidbody2D myRigidbody;
     CapsuleCollider2D myCollider;
@@ -44,6 +45,9 @@ public class HumanAI : MonoBehaviour
     Body body;
     bool aiActive = false;
 
+    Vector2 originalScale = Vector2.one;
+
+
     private enum STATE
     {
         IDLE, PATROL, AGGRO, DYING
@@ -54,6 +58,8 @@ public class HumanAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        originalScale = transform.localScale;
+
         myRigidbody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<CapsuleCollider2D>();
         body = GetComponent<Body>();
@@ -102,7 +108,7 @@ public class HumanAI : MonoBehaviour
     }
 
     public void Animations() {
-        transform.localScale = new Vector2(directionFacing, 1f);
+        transform.localScale = new Vector2(directionFacing, 1f) * originalScale;
         myAnimator.SetBool("isRunning", moving);
         myAnimator.SetBool("onGround", onGround);
     }
@@ -166,7 +172,7 @@ public class HumanAI : MonoBehaviour
     void PlayerCheck() {
         Transform head = GetComponentInChildren<Transform>();
         bool facingPlayer = Mathf.Sign(player.position.x - transform.position.x) == Mathf.Sign(directionFacing);
-        bool obstacle = Physics2D.Linecast(head.position, player.position, platformLayerMask);
+        bool obstacle = Physics2D.Linecast(head.position, player.position, obstacleMask);
         if(Vector3.Distance(transform.position, player.position) < lineOfSightDistance && facingPlayer && !obstacle) {
             state = STATE.AGGRO;
             gunArm.position = player.position;

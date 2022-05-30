@@ -115,15 +115,11 @@ public class PlayerHead : MonoBehaviour
         GameObject explosion = Instantiate(explosionParticle, explosionParticle.transform.position, Quaternion.identity);
         explosion.GetComponent<ParticleSystem>().Play();
         Destroy(explosion, 1f);
-        FindObjectOfType<GameSession>().PlayerDeath();
+        GetComponentInParent<Player>().PlayerDead();
     }
 
     private bool IsGrounded() {
-        feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, platformLayerMask);
-        if(feet.collider == null) {
-            feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, 1f, bodyLayerMask);
-        }
-        //Debug.DrawRay(myCollider.bounds.center, Vector2.down, Color.red);
+        feet = Physics2D.Raycast(myCollider.bounds.center, Vector2.down, myCollider.bounds.size.y * 0.6f, platformLayerMask);
         return feet.collider != null;
     }
 
@@ -170,7 +166,7 @@ public class PlayerHead : MonoBehaviour
         }
 
         if(collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
-            FindObjectOfType<GameSession>().PlayerDeath();
+            GetComponentInParent<Player>().PlayerDead();
         }
     }
 
@@ -190,7 +186,7 @@ public class PlayerHead : MonoBehaviour
 
     void OnPossess(InputValue value) {
         if (isPossessing && value.isPressed) {
-            Dispossess();
+            Dispossess(false);
         } else {
             possess = value.isPressed;
         }
@@ -203,7 +199,7 @@ public class PlayerHead : MonoBehaviour
         }
     }
 
-    public void Dispossess() {
+    public void Dispossess(bool giveIFrames) {
         player.transform.DetachChildren();
         transform.parent = player.transform;
         Body bodyComponent = body.GetComponent<Body>();
@@ -215,7 +211,9 @@ public class PlayerHead : MonoBehaviour
         myRigidbody.velocity = Vector2.up * jumpVelocity;
         CameraOperations frameSwitcher = FindObjectOfType<CameraOperations>();
         frameSwitcher.SetFrame(0);
-        iFrames = iFramesTime;
+        if (giveIFrames) {
+            iFrames = iFramesTime * 2f;
+        }
     }
 
     public void Possess(Body newBody) {
@@ -244,5 +242,9 @@ public class PlayerHead : MonoBehaviour
 
     public void LevelExit() {
         isActive = false;
+    }
+
+    private void ResetPosition(Vector3 pos) {
+        transform.position = pos;
     }
 }

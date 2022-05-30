@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3362158340097955275}
   - component: {fileID: 3362158340097955274}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -309,7 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3362158340227621664}
   - component: {fileID: 3362158340227621665}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Street Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
