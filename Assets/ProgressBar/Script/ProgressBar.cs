@@ -33,18 +33,17 @@ public class ProgressBar : MonoBehaviour
     private AudioSource audiosource;
     private Text txtTitle;
     private float barValue;
+    /*
     public float BarValue
     {
         get { return barValue; }
 
         set
         {
-            value = Mathf.Clamp(value, 0, 100);
-            barValue = value;
-            UpdateValue(barValue);
+            
 
         }
-    }
+    }*/
 
         
 
@@ -68,15 +67,19 @@ public class ProgressBar : MonoBehaviour
         barBackground.color = BarBackGroundColor; 
         barBackground.sprite = BarBackGroundSprite;
 
-        UpdateValue(barValue);
-
-
+        UpdateValue(barValue, 100);
     }
 
-    void UpdateValue(float val)
+    public void BarValue(float val, float max) {
+        //value = Mathf.Clamp(value, 0, 100);
+        //barValue = value;
+        UpdateValue(val, max);
+    }
+
+    void UpdateValue(float val, float max)
     {
-        bar.fillAmount = val / 100;
-        txtTitle.text = Title + " " + val + "%";
+        bar.fillAmount = val / max;
+        txtTitle.text = Title + ": " + val;
 
         if (Alert >= val)
         {
@@ -94,7 +97,7 @@ public class ProgressBar : MonoBehaviour
     {
         if (!Application.isPlaying)
         {           
-            UpdateValue(50);
+            UpdateValue(50, 100);
             txtTitle.color = TitleColor;
             txtTitle.font = TitleFont;
             txtTitle.fontSize = TitleFontSize;

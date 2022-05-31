@@ -101,8 +101,8 @@ public class Body : MonoBehaviour
         SendMessage("Possess", possess);
         DynamicBody(possess);
     }
-    public float GetHealthPercentage() {
-        return ((float)health / (float)maxHealth) * 100f;
+    public float GetMaxHealth() {
+        return maxHealth;
     }
 
     public string GetTypeName() {

@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class BossAI : MonoBehaviour
 
 {
-    [SerializeField] int health = 1000;
+    [SerializeField] int maxHealth = 1000;
+    int health;
 
     [SerializeField] Transform head;
     Vector2 headOrigin;
@@ -42,6 +43,7 @@ public class BossAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        health = maxHealth;
         headOrigin = head.position;
         StartCoroutine("Idle");
         myAudio.GetComponent<AudioSource>();
@@ -51,12 +53,14 @@ public class BossAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (player == null) {
+            player = FindObjectOfType<PlayerHead>().transform;
+        }
         head.position = Vector2.Lerp(head.position, headOrigin, 0.05f);
         Color newColor = new Color(Mathf.Min(originalHeadColour.r, headSprite.color.r + 0.1f), Mathf.Min(originalHeadColour.g, headSprite.color.g + 0.1f), Mathf.Min(originalHeadColour.b, headSprite.color.b + 0.1f));
         headSprite.color = newColor;
         iFrameTimer = Mathf.Max(0, iFrameTimer - Time.deltaTime);
-        healthBar.BarValue = health / 10;
+        healthBar.BarValue(health, maxHealth);
         if (deathExplosion.isPlaying) {
             if (!myAudio.isPlaying) {
                 myAudio.Play();

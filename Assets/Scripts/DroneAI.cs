@@ -15,6 +15,9 @@ public class DroneAI : MonoBehaviour
     Vector2 startPosition;
     Vector2 targetPosition;
 
+    [SerializeField] float iFramesTime = 1f;
+    float iFrames = 0f;
+
     [SerializeField] float idleTime = 2f;
     float idleCountdown;
 
@@ -51,8 +54,6 @@ public class DroneAI : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<BoxCollider2D>();
 
-        player = FindObjectOfType<PlayerHead>().transform;
-
         if (transform.parent != null) {
             enemy = transform.parent.gameObject.GetComponent<Enemy>();
             if (enemy != null) {
@@ -68,7 +69,9 @@ public class DroneAI : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate() {
-
+        if (player == null) {
+            player = FindObjectOfType<PlayerHead>().transform;
+        }
         if (!aiActive) { return; }
         switch (state) {
             case STATE.IDLE:
@@ -88,6 +91,8 @@ public class DroneAI : MonoBehaviour
                 Die();
                 break;
         }
+        Invincible();
+
     }
 
     private void MoveCannon() {
@@ -117,6 +122,8 @@ public class DroneAI : MonoBehaviour
         } else {
             targetPosition = startPosition + (Random.insideUnitCircle * patrolRadius);
         }
+        myRigidbody.SetRotation(-myRigidbody.velocity.x);
+
     }
 
     void Aggro() {
@@ -153,5 +160,20 @@ public class DroneAI : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision) {
         targetPosition = startPosition + (Random.insideUnitCircle * patrolRadius);
+    }
+    private void Invincible() {
+        if (iFrames > 0) {
+            iFrames = Mathf.Max(0f, iFrames - Time.deltaTime);
+            float alpha = Mathf.Sin(Time.realtimeSinceStartup * 100) * 0.5f;
+            SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
+            for (int i = 0; i < sprites.Length; i++) {
+                if (sprites[i] != null) {
+                    sprites[i].color = new Color(sprites[i].color.r, sprites[i].color.g, sprites[i].color.b, iFrames > 0 ? 1 - alpha : 1f);
+                }
+            }
+        }
+    }
+    private void Damaged() {
+        iFrames = iFramesTime;
     }
 }

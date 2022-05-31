@@ -101,7 +101,7 @@ MonoBehaviour:
   m_BoneTransforms:
   - {fileID: 4996222891737312347}
   m_Bounds:
-    m_Center: {x: 0.14011246, y: 0.09783614, z: 0}
+    m_Center: {x: 0.14011246, y: 0.09783602, z: 0}
     m_Extent: {x: 0.4451502, y: 0.58927405, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
@@ -760,7 +760,7 @@ MonoBehaviour:
   m_BoneTransforms:
   - {fileID: 6249158901174456522}
   m_Bounds:
-    m_Center: {x: -0.08417615, y: -0.014882386, z: 0}
+    m_Center: {x: -0.08417615, y: -0.0148822665, z: 0}
     m_Extent: {x: 0.43617776, y: 0.6129863, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
@@ -1498,9 +1498,9 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0.08291515, w: 0.99655664}
     - {x: 0, y: 0, z: 0, w: 1}
     m_StoredLocalRotations:
-    - {x: 0, y: 0, z: 0, w: 0}
-    - {x: 0, y: 0, z: 0, w: 0}
-    - {x: 0, y: 0, z: 0, w: 0}
+    - {x: 0, y: -0, z: 0.99954605, w: 0.030129718}
+    - {x: 0, y: 0, z: 0.08291515, w: 0.99655664}
+    - {x: 0, y: 0, z: 0, w: 1}
   m_Flip: 1
 --- !u!1 &8641898199463867905
 GameObject:
@@ -1687,9 +1687,9 @@ MonoBehaviour:
     - {x: -0, y: -0, z: -0.019452984, w: -0.9998108}
     - {x: 0, y: 0, z: 0, w: 1}
     m_StoredLocalRotations:
-    - {x: 0, y: 0, z: 0, w: 0}
-    - {x: 0, y: 0, z: 0, w: 0}
-    - {x: 0, y: 0, z: 0, w: 0}
+    - {x: 0, y: 0, z: -0.99999624, w: 0.002736037}
+    - {x: -0, y: -0, z: -0.019452984, w: -0.9998108}
+    - {x: 0, y: 0, z: 0, w: 1}
   m_Flip: 1
 --- !u!1 &8641898200793038439
 GameObject:

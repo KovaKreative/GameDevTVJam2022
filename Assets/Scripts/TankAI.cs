@@ -59,7 +59,7 @@ public class TankAI : MonoBehaviour
         myCollider = GetComponent<PolygonCollider2D>();
         body = GetComponent<Body>();
 
-        player = FindObjectOfType<PlayerHead>().transform;
+
         if (transform.parent != null) {
             enemy = transform.parent.gameObject.GetComponent<Enemy>();
             if (enemy != null) {
@@ -74,6 +74,9 @@ public class TankAI : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate() {
+        if (player == null) {
+            player = FindObjectOfType<PlayerHead>().transform;
+        }
         if (!aiActive) { return; }
         switch (state) {
             case STATE.IDLE:
@@ -124,9 +127,8 @@ public class TankAI : MonoBehaviour
 
         Vector2 colliderCenter = myCollider.bounds.center;
         RaycastHit2D arms = Physics2D.BoxCast(colliderCenter, myCollider.bounds.size * 0.5f, 0f, Vector2.right * directionFacing, 0.3f, platformLayerMask);
-        RaycastHit2D feet = Physics2D.Raycast(colliderCenter, new Vector2(directionFacing, -1f), myCollider.bounds.size.y, platformLayerMask);
 
-        if (arms.collider != null || feet.collider == null) {
+        if (arms.collider != null) {
             directionFacing = -directionFacing;
         }
 
@@ -190,7 +192,6 @@ public class TankAI : MonoBehaviour
     private void Invincible() {
         if (iFrames > 0) {
             iFrames = Mathf.Max(0f, iFrames - Time.deltaTime);
-            print(Time.realtimeSinceStartup);
             float alpha = Mathf.Sin(Time.realtimeSinceStartup * 100) * 0.5f;
             SpriteRenderer sprite = GetComponent<SpriteRenderer>();
             if (sprite != null) {

@@ -15,14 +15,11 @@ EditorBuildSettings:
     path: Assets/Scenes/2Street.unity
     guid: 0755a410f180544478e8bd62f43e3fa0
   - enabled: 1
-    path: Assets/Scenes/3Ascending.unity
-    guid: 8c36c9edacd0b8944b61a8eb55cc283a
-  - enabled: 1
     path: Assets/Scenes/4Boss1.unity
     guid: cab188b1322565a4a84ff6ee807eae7a
   - enabled: 1
-    path: Assets/Scenes/5ObstacleCourse.unity
-    guid: 4254735fcb0a1fc4587693de1916518c
+    path: Assets/Scenes/3Ascending.unity
+    guid: 8c36c9edacd0b8944b61a8eb55cc283a
   - enabled: 1
     path: Assets/Scenes/6Boss2.unity
     guid: 46ec8d6848d6ee84dab8f273eec1e183

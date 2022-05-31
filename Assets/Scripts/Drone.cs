@@ -9,7 +9,10 @@ public class Drone : MonoBehaviour
     [SerializeField] float acceleration = 2f;
 
     [SerializeField] Gun gun;
-
+    [SerializeField] float damageTime = 0.3f;
+    float damage = 0f;
+    [SerializeField] float iFramesTime = 1f;
+    float iFrames = 0f;
 
     bool moving = false;
     bool isAlive = true;
@@ -47,6 +50,8 @@ public class Drone : MonoBehaviour
         //Animations();
         MovePlayer();
         MoveCannon();
+        Invincible();
+
     }
 
     private void MovePlayer() {
@@ -114,6 +119,19 @@ public class Drone : MonoBehaviour
         Shoot(value.isPressed);
     }
 
+    private void Invincible() {
+        if (iFrames > 0) {
+            iFrames = Mathf.Max(0f, iFrames - Time.deltaTime);
+            float alpha = Mathf.Sin(Time.realtimeSinceStartup * 100) * 0.5f;
+            SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
+            for (int i = 0; i < sprites.Length; i++) {
+                if (sprites[i] != null) {
+                    sprites[i].color = new Color(sprites[i].color.r, sprites[i].color.g, sprites[i].color.b, iFrames > 0 ? 1 - alpha : 1f);
+                }
+            }
+        }
+    }
+
     public void Possess(bool possess) {
         if (possess) {
             head = GetComponentInChildren<PlayerHead>().gameObject;
@@ -123,5 +141,9 @@ public class Drone : MonoBehaviour
             head = null;
         }
         possessed = possess;
+    }
+
+    private void Damaged() {
+        iFrames = iFramesTime;
     }
 }

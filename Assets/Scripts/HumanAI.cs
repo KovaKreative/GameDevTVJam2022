@@ -47,6 +47,8 @@ public class HumanAI : MonoBehaviour
 
     Vector2 originalScale = Vector2.one;
 
+    Vector2 aimTarget = Vector2.zero;
+    Vector2 aimError;
 
     private enum STATE
     {
@@ -58,13 +60,13 @@ public class HumanAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        aimError = Random.insideUnitCircle * new Vector2(1f, 2f);
         originalScale = transform.localScale;
 
         myRigidbody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<CapsuleCollider2D>();
         body = GetComponent<Body>();
         
-        player = FindObjectOfType<PlayerHead>().transform;
         if (transform.parent != null) {
             enemy = transform.parent.gameObject.GetComponent<Enemy>();
             if (enemy != null) {
@@ -80,6 +82,9 @@ public class HumanAI : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (player == null) {
+            player = FindObjectOfType<PlayerHead>().transform;
+        }
         if (!aiActive) { return; }
         switch (state) {
             case STATE.IDLE:
@@ -150,10 +155,14 @@ public class HumanAI : MonoBehaviour
 
         directionFacing = Mathf.Sign(player.position.x - transform.position.x);
 
-        gunArm.position = player.position;
+        gunArm.position = Vector2.Lerp(gunArm.position, aimTarget, 0.2f);
+
         if (shooting) {
+            aimError = Random.insideUnitCircle * new Vector2(1f, 2f);
             gun.EnemyFire(shooting);
             shooting = false;
+            aimTarget = player.position + (Vector3)aimError;
+
         }
 
         if (Vector3.Distance(transform.position, player.position) < aggroLimitDistance) {
@@ -175,7 +184,7 @@ public class HumanAI : MonoBehaviour
         bool obstacle = Physics2D.Linecast(head.position, player.position, obstacleMask);
         if(Vector3.Distance(transform.position, player.position) < lineOfSightDistance && facingPlayer && !obstacle) {
             state = STATE.AGGRO;
-            gunArm.position = player.position;
+            aimTarget = player.position + (Vector3)aimError;
         }
     }
 

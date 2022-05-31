@@ -5,7 +5,7 @@ using Cinemachine;
 
 public class CameraOperations : MonoBehaviour
 {
-    private float[] orthoFrames = { 7, 8, 10, 9 };
+    private float[] orthoFrames = { 7, 10, 12, 11 };
     private int currentFrame = 0;
 
     private CinemachineVirtualCamera camera;
@@ -13,7 +13,6 @@ public class CameraOperations : MonoBehaviour
     void Start()
     {
         camera = GetComponent<CinemachineVirtualCamera>();
-        camera.Follow = FindObjectOfType<PlayerHead>().transform;
     }
 
     // Update is called once per frame
@@ -27,5 +26,10 @@ public class CameraOperations : MonoBehaviour
         currentFrame = frame;
     }
 
-
+    public void AssignNewFollow() {
+        PlayerHead player = FindObjectOfType<PlayerHead>();
+        if (player != null) {
+            camera.Follow = player.gameObject.transform;
+        }
+    }
 }

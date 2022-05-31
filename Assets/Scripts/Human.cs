@@ -13,11 +13,6 @@ public class Human : MonoBehaviour
     [SerializeField] float iFramesTime = 1f;
     float iFrames = 0f;
 
-    float coyoteTime = 0.2f;
-    private float coyoteTimeCounter;
-    float jumpBufferTime = 0.2f;
-    private float jumpBufferCounter;
-
     bool moving = false;
     bool isAlive = true;
     bool possessed = false;

@@ -8,10 +8,6 @@ public class Tank : MonoBehaviour
     [SerializeField] float acceleration = 3f;
     [SerializeField] float jumpVelocity = 7f;
     [SerializeField] float terminalVelocity = 10f;
-    [SerializeField] float coyoteTime = 0.2f;
-    private float coyoteTimeCounter;
-    [SerializeField] float jumpBufferTime = 0.2f;
-    private float jumpBufferCounter;
     [SerializeField] float cannonRotateSpeed = 5f;
 
     [SerializeField] Gun gun;

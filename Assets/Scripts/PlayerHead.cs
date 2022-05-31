@@ -244,7 +244,4 @@ public class PlayerHead : MonoBehaviour
         isActive = false;
     }
 
-    private void ResetPosition(Vector3 pos) {
-        transform.position = pos;
-    }
 }
