@@ -23,6 +23,10 @@ public class TitleScreen : MonoBehaviour
         SceneManager.LoadSceneAsync(1);
     }
 
+    public void Credits() {
+        SceneManager.LoadSceneAsync(SceneManager.sceneCountInBuildSettings - 1);
+    }
+
     public void EndGame() {
         SceneManager.LoadSceneAsync(0);
     }

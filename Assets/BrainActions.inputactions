@@ -186,6 +186,17 @@
                 },
                 {
                     "name": "",
+                    "id": "11a035aa-5b0c-416b-9790-ca9c90dfea76",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "93e4e701-e155-49c5-bf77-d0c5d6876cd0",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
@@ -198,7 +209,7 @@
                 {
                     "name": "",
                     "id": "bc264320-332b-4f52-99ad-04687a9c917b",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -220,7 +231,18 @@
                 {
                     "name": "",
                     "id": "7b1a297c-da2c-4c24-aff0-71149eb1435f",
-                    "path": "<Keyboard>/space",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Possess",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74226e9b-20c9-41f1-b937-ea6b557890e1",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
